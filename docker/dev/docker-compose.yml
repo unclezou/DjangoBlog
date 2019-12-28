@@ -1,0 +1,40 @@
+version: "3.7"
+services:
+  # server-src:
+  #   image: registry.cn-shenzhen.aliyuncs.com/baoping/cedb-server-src-py:prod
+  #   container_name: blog-server-src-py
+  #   volumes:
+  #     - blog-server-src-py:/link-src:consistent
+  #   command: sh -c "cp_r.sh /home/src /link-src"
+  py:
+    image: zouweidong73/blog-run-py:prod
+    container_name: blog_py
+    ports:
+      - "8002:8000"
+    volumes:
+    #   - blog-server-src-py:/home/blog-server-py
+      - ../..:/home/blog-server
+    working_dir: /home/blog-server
+    # restart: always
+    # command: sh -c "python manage.py runserver 0.0.0.0:8000"
+    command: "sleep 1000"
+    # links: 
+    #   - db
+  # db:
+  #   image: mysql:5.7
+  #   # restart: always
+  #   environment:
+  #     - MYSQL_HOST=localhost
+  #     - MYSQL_PORT=3306  # cannot change this port to other number
+  #     - MYSQL_ROOT_HOST=%
+  #     - MYSQL_DATABASE=djangoblog
+  #     - MYSQL_USER=myblog
+  #     - MYSQL_PASSWORD=123456
+  #     - MYSQL_ROOT_PASSWORD=123456
+  #   volumes:
+  #     - C:\ProgramData\MySQL\MySQL Server 8.0:/var/lib/mysql
+  #   ports:
+  #     - "3302:3306"
+    # command: "sleep 1000"
+# volumes:
+#   blog-server-src-py:
