@@ -27,14 +27,14 @@ cd 至项目根目录
 # 将镜像推送到Registry
 ```
 # 登录镜像仓库
-docker login --username=zouweidong73
+docker login --username=zouweidong72 registry.cn-shenzhen.aliyuncs.com
 
 # 验证编译
 查看目录: docker run --rm -it blog-server-src-py sh -c "cd /home/src && ls -l"
 
 # 标记镜像为长期稳定版本(lts, Long Time Support)
-docker tag blog-server-src-py zouweidong73/blog-server-src-py:prod
+docker tag blog-server-src-py registry.cn-shenzhen.aliyuncs.com/django-blog/blog-server-src-py:prod
 
 # 推送到Registry
-docker push zouweidong73/blog-server-src-py:prod
+docker push registry.cn-shenzhen.aliyuncs.com/django-blog/blog-server-src-py:prod
 ```

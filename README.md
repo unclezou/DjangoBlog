@@ -24,6 +24,9 @@
 mysql客户端从`pymysql`修改成了`mysqlclient`，具体请参考 [pypi](https://pypi.org/project/mysqlclient/) 查看安装前的准备。
 
 使用pip安装： `pip install -Ur requirements.txt`
+更改pip源，清华镜像
+pip install -i https://pypi.tuna.tsinghua.edu.cn/simple virtualenv
+
 
 如果你没有pip，使用如下方式安装：
 - OS X / Linux 电脑，终端下执行: 
