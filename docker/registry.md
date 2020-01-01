@@ -10,13 +10,13 @@ cd 至项目根目录
 # 将镜像推送到Registry
 ```
 # 登录镜像仓库
-docker login --username=zouweidong73
+docker login --username=zouweidong72 registry.cn-shenzhen.aliyuncs.com
 
 # 标记镜像为长期稳定版本(lts, Long Time Support)
-docker tag blog-run-py zouweidong73/blog-run-py:prod
+docker tag blog-run-py registry.cn-shenzhen.aliyuncs.com/django-blog/blog-run-py:prod
 
 # 推送到Registry
-docker push zouweidong73/blog-run-py:prod
+docker push registry.cn-shenzhen.aliyuncs.com/django-blog/blog-run-py:prod
 ```
 
 
@@ -38,3 +38,6 @@ docker tag blog-server-src-py registry.cn-shenzhen.aliyuncs.com/django-blog/blog
 # 推送到Registry
 docker push registry.cn-shenzhen.aliyuncs.com/django-blog/blog-server-src-py:prod
 ```
+
+# 容器测试
+docker run --rm -it -v D:\WorkSpace\Exercise\DjangoBlog:/home/app -w /home/app/ -p 8000:8000 registry.cn-shenzhen.aliyuncs.com/django-blog/blog-run-py:prod bash
