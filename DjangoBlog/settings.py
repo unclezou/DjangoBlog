@@ -107,27 +107,27 @@ WSGI_APPLICATION = 'DjangoBlog.wsgi.application'
 #     }
 # }
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'djangoblog',
+#         'USER': 'root',
+#         'PASSWORD': 'bp*Cedb',
+#         'HOST': '219.223.223.128',
+#         'PORT': '3306'
+#     }
+# }
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'djangoblog',
         'USER': 'root',
-        'PASSWORD': 'bp*Cedb',
-        'HOST': '219.223.223.128',
+        'PASSWORD': '123456',
+        'HOST': '127.0.0.1',
         'PORT': '3306'
     }
 }
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'rpa',
-#         'USER': 'root',
-#         'PASSWORD': '123456',
-#         'HOST': '123.0.0.1',
-#         'PORT': '3306'
-#     }
-# }
 
 # Password validation
 # https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators

@@ -41,3 +41,5 @@ docker push registry.cn-shenzhen.aliyuncs.com/django-blog/blog-server-src-py:pro
 
 # 容器测试
 docker run --rm -it -v D:\WorkSpace\Exercise\DjangoBlog:/home/app -w /home/app/ -p 8000:8000 registry.cn-shenzhen.aliyuncs.com/django-blog/blog-run-py:prod bash
+
+python ./manage.py runserver 0.0.0.0:8000
