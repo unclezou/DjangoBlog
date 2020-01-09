@@ -1,6 +1,12 @@
 
 FROM m0elnx/ubuntu-32bit
 
+#
+# NOTE: THIS DOCKERFILE IS GENERATED VIA "update.sh"
+#
+# PLEASE DO NOT EDIT IT DIRECTLY.
+#
+
 # ensure local python is preferred over distribution python
 ENV PATH /usr/local/bin:$PATH
 
@@ -8,18 +14,16 @@ ENV PATH /usr/local/bin:$PATH
 # > At the moment, setting "LANG=C" on a Linux system *fundamentally breaks Python 3*, and that's not OK.
 ENV LANG C.UTF-8
 
-# install ca-certificates so that HTTPS works consistently
-# other runtime dependencies for Python are installed later
-RUN apk add --no-cache ca-certificates
+# extra dependencies (over what buildpack-deps already includes)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+		libbluetooth-dev \
+		tk-dev \
+	&& rm -rf /var/lib/apt/lists/*
 
 ENV GPG_KEY 0D96DF4D4110E5C43FBFB17F2D347EA6AA65421D
 ENV PYTHON_VERSION 3.6.10
 
 RUN set -ex \
-	&& apk add --no-cache --virtual .fetch-deps \
-		gnupg \
-		tar \
-		xz \
 	\
 	&& wget -O python.tar.xz "https://www.python.org/ftp/python/${PYTHON_VERSION%%[a-z]*}/Python-$PYTHON_VERSION.tar.xz" \
 	&& wget -O python.tar.xz.asc "https://www.python.org/ftp/python/${PYTHON_VERSION%%[a-z]*}/Python-$PYTHON_VERSION.tar.xz.asc" \
@@ -31,34 +35,6 @@ RUN set -ex \
 	&& mkdir -p /usr/src/python \
 	&& tar -xJC /usr/src/python --strip-components=1 -f python.tar.xz \
 	&& rm python.tar.xz \
-	\
-	&& apk add --no-cache --virtual .build-deps  \
-		bluez-dev \
-		bzip2-dev \
-		coreutils \
-		dpkg-dev dpkg \
-		expat-dev \
-		findutils \
-		gcc \
-		gdbm-dev \
-		libc-dev \
-		libffi-dev \
-		libnsl-dev \
-		libtirpc-dev \
-		linux-headers \
-		make \
-		ncurses-dev \
-		openssl-dev \
-		pax-utils \
-		readline-dev \
-		sqlite-dev \
-		tcl-dev \
-		tk \
-		tk-dev \
-		xz-dev \
-		zlib-dev \
-# add build deps before removing fetch deps in case there's overlap
-	&& apk del --no-network .fetch-deps \
 	\
 	&& cd /usr/src/python \
 	&& gnuArch="$(dpkg-architecture --query DEB_BUILD_GNU_TYPE)" \
@@ -72,9 +48,6 @@ RUN set -ex \
 		--with-system-ffi \
 		--without-ensurepip \
 	&& make -j "$(nproc)" \
-# set thread stack size to 1MB so we don't segfault before we hit sys.getrecursionlimit()
-# https://github.com/alpinelinux/aports/commit/2026e1259422d4e0cf92391ca2d3844356c649d0
-		EXTRA_CFLAGS="-DTHREAD_STACK_SIZE=0x100000" \
 # setting PROFILE_TASK makes "--enable-optimizations" reasonable: https://bugs.python.org/issue36044 / https://github.com/docker-library/python/issues/160#issuecomment-509426916
 		PROFILE_TASK='-m test.regrtest --pgo \
 			test_array \
@@ -112,13 +85,7 @@ RUN set -ex \
 			test_unicode \
 		' \
 	&& make install \
-	\
-	&& find /usr/local -type f -executable -not \( -name '*tkinter*' \) -exec scanelf --needed --nobanner --format '%n#p' '{}' ';' \
-		| tr ',' '\n' \
-		| sort -u \
-		| awk 'system("[ -e /usr/local/lib/" $1 " ]") == 0 { next } { print "so:" $1 }' \
-		| xargs -rt apk add --no-cache --virtual .python-rundeps \
-	&& apk del --no-network .build-deps \
+	&& ldconfig \
 	\
 	&& find /usr/local -depth \
 		\( \
@@ -146,7 +113,7 @@ ENV PYTHON_GET_PIP_SHA256 b86f36cc4345ae87bfd4f10ef6b2dbfa7a872fbff70608a1e43944
 RUN set -ex; \
 	\
 	wget -O get-pip.py "$PYTHON_GET_PIP_URL"; \
-	echo "$PYTHON_GET_PIP_SHA256 *get-pip.py" | sha256sum -c -; \
+	echo "$PYTHON_GET_PIP_SHA256 *get-pip.py" | sha256sum --check --strict -; \
 	\
 	python get-pip.py \
 		--disable-pip-version-check \
