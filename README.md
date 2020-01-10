@@ -1,7 +1,7 @@
 # DjangoBlog
 欢迎访问[我的小站](http://www.zwdong.top)  
 
-本项目fork自[liangliangyy/DjangoBlog](https://github.com/liangliangyy/DjangoBlog)
+本项目fork自[liangliangyy/DjangoBlog](https://github.com/liangliangyy/DjangoBlog)  
 使用docker重新做了部署
 基于`python3.6`和`Django2.1`的博客。   
 
