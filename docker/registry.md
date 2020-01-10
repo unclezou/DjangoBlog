@@ -40,6 +40,8 @@ docker push registry.cn-shenzhen.aliyuncs.com/django-blog/blog-server-src-py:pro
 ```
 
 # 容器测试
+
+## win 系统调试:
 docker run --rm -it -v D:\WorkSpace\Exercise\DjangoBlog:/home/app -w /home/app/ -p 8000:8000 registry.cn-shenzhen.aliyuncs.com/django-blog/blog-run-py:prod bash
 
 数据库设置
@@ -62,14 +64,78 @@ DATABASES = {
 容器内的localhost非宿主机的localhost  
 win下是同ipconfig 查看分配给docker的内网网段 为 172.17.0.1
 
-容器内测试服务器:
+## ubutun 系统调试:
+* 安装系统依赖
+```
+sudo apt install mysql-server -y #安装mysql
+sudo apt install python3-dev python3-pip python-pip memcached -y #安装pip和memcached
+sudo apt install supervisor -y
+sudo apt install nginx -y
+```
+
+sudo mysql_secure_installation
+
+sudo vim /etc/mysql/conf.d/mysql.cnf
+```
+[mysqld]
+character-set-server=utf8mb4
+collation-server=utf8mb4_unicode_ci
+
+[client]
+default-character-set = utf8mb4
+
+[mysql]
+default-character-set = utf8mb4
+```
+sudo service mysql restart
+
+* 配置mysql 远程workbench 访问
+sudo mysql -uroot -p
+SELECT host,user,authentication_string FROM mysql.user;
+CREATE USER 'zwd'@'%' IDENTIFIED BY 'Zwd123456';
+```
+ERROR 1819 (HY000): Your password does not satisfy the current policy requirements
+set global validate_password_policy=0;
+set global validate_password_mixed_case_count=0;
+set global validate_password_number_count=3;
+set global validate_password_special_char_count=0;
+set global validate_password_length=3;
+SHOW VARIABLES LIKE 'validate_password%';
+```
+**权限设置**
+GRANT ALL PRIVILEGES ON *.* TO 'zwd'@'%' IDENTIFIED BY "Zwd123456";  
+FLUSH PRIVILEGES;
+**修改配置**
+sudo vim /etc/mysql/mysql.conf.d/mysqld.cnf
+```
+bind-address=0.0.0.0
+```
+sudo service mysql restart
+
+命令行test: mysql -u zwd -h 111.229.126.127 -p
+
+容器内测试mysql 端口:
 telnet 172.17.0.1 3306
 Trying 172.17.0.1...
 Connected to 172.17.0.1.
 Escape character is '^]'.
 
+## vim settings.py
 
-数据迁移
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'blog',
+        'USER': 'zwd',
+        'PASSWORD': 'Zwd123456',
+        'HOST': '172.18.0.1',
+        'PORT': '3306'
+    }
+}
+容器内的localhost非宿主机的localhost  
+ifconfig 查看分配给docker的内网网段 为 172.18.0.1
+
+## 数据迁移
 python ./manage.py makemigrations
 python ./manage.py migrate
 python ./manage.py createsuperuser #创建超级用户

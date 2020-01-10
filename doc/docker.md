@@ -1,3 +1,8 @@
+
+# 系统查看命令
+* 查看Linux内核版本命令: uname --all
+* 看Linux系统版本的命令: lsb_release -a
+
 安装dockers
 
 # 卸载旧版本:  
