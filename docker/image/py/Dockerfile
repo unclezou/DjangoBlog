@@ -10,4 +10,6 @@ RUN cp -f /home/docker/config/pip.conf /etc/ && \
 RUN pip install --upgrade pip && \
 	pip install --trusted-host pypi.python.org -r /home/requirements.txt
 
+RUN pip install jupyter
+
 CMD ["bash"]

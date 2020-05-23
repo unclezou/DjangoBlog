@@ -38,3 +38,11 @@ docker tag blog-server-src-py registry.cn-shenzhen.aliyuncs.com/django-blog/blog
 # 推送到Registry
 docker push registry.cn-shenzhen.aliyuncs.com/django-blog/blog-server-src-py:prod
 ```
+
+
+
+docker run --rm -it -v blog-run-prod_blog-server-src-py:/home/app/blog-server registry.cn-shenzhen.aliyuncs.com/django-blog/blog-run-py:prod bash
+
+notebook:
+
+jupyter notebook list 获取token
