@@ -1,4 +1,4 @@
-version: "3.7"
+version: "2.2"
 services:
   server-src:
     image: registry.cn-shenzhen.aliyuncs.com/django-blog/blog-server-src-py:prod
@@ -13,10 +13,10 @@ services:
       - "8000:8000"
     volumes:
       - blog-server-src-py:/home/blog-server
-      - /Work/dataset/uploads:/home/blog-server/uploads
+      - /Work/dataset/uploads:/home/dataset/uploads
     working_dir: /home/blog-server
     # restart: always
-    command: sh -c "python manage.py runserver 0.0.0.0:8000"
+    command: sh -c "ln -sf /home/dataset/uploads  /home/blog-server/uploads && python manage.py runserver 0.0.0.0:8000"
   notebook:
     image: registry.cn-shenzhen.aliyuncs.com/django-blog/blog-run-py:prod
     container_name: jupyter
