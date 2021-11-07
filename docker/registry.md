@@ -51,3 +51,9 @@ docker run -itd -v /Work/Project/DjangoBlog:/home/blog-server -v /Work/dataset/u
 
 
 
+# notebook
+docker run --rm -it -v blog-run-prod_blog-server-src-py:/home/app/blog-server registry.cn-shenzhen.aliyuncs.com/django-blog/blog-run-py:prod bash
+
+notebook:
+
+jupyter notebook list 获取token
