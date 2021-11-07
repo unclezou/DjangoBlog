@@ -38,3 +38,16 @@ docker tag blog-server-src-py registry.cn-shenzhen.aliyuncs.com/django-blog/blog
 # 推送到Registry
 docker push registry.cn-shenzhen.aliyuncs.com/django-blog/blog-server-src-py:prod
 ```
+
+
+# 本地调试
+docker run --rm -it  -v /Work/Project/DjangoBlog:/home/blog-server -v /Work/dataset/uploads:/home/dataset/uploads -p 8000:8000 -p 8888:8888 -w /home/blog-server registry.cn-shenzhen.aliyuncs.com/django-blog/blog-run-py:prod bash
+python manage.py runserver 0.0.0.0:8000
+
+
+# 启动命令   docker-compose弃用
+* 启动方式 bash -c " "
+docker run -itd -v /Work/Project/DjangoBlog:/home/blog-server -v /Work/dataset/uploads:/home/dataset/uploads -p 8000:8000 -p 8888:8888 -w /home/blog-server registry.cn-shenzhen.aliyuncs.com/django-blog/blog-run-py:prod  bash -c "sleep 2 && ln -sf /home/dataset/uploads  /home/blog-server/uploads  && python manage.py runserver 0.0.0.0:8000"
+
+
+
